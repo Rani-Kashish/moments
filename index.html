@@ -196,8 +196,19 @@
   /* overlay: password gate + identity picker */
   .overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;
     background:radial-gradient(900px 600px at 50% -10%, var(--bg-a), #fbeefa)}
-  .gate{background:#fff;border-radius:26px;box-shadow:0 20px 50px var(--shadow);padding:30px 26px;max-width:420px;width:100%;text-align:center}
-  .gate h2{margin:6px 0 4px;font-size:24px}
+  .gate{background:#fff;border-radius:28px;box-shadow:0 24px 60px var(--shadow);padding:34px 28px;max-width:430px;width:100%;text-align:center;
+    border:2px solid #fff;position:relative;overflow:hidden}
+  .gate::before{content:"";position:absolute;inset:0;border-radius:28px;padding:3px;pointer-events:none;
+    background:linear-gradient(120deg,var(--accent),var(--accent2),var(--accent3),var(--accent));
+    -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.55}
+  .gate .logo{font-size:52px;display:inline-block;animation:bobLogo 2.4s ease-in-out infinite}
+  @keyframes bobLogo{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-8px) rotate(4deg)}}
+  .gate .parade{display:flex;justify-content:center;gap:-6px;margin:10px 0 4px}
+  .gate .parade .ava{margin-left:-8px;animation:popIn .4s ease both}
+  .gate .parade .ava:first-child{margin-left:0}
+  @keyframes popIn{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+  .gate h2{margin:6px 0 4px;font-size:26px;
+    background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
   .gate p{margin:0 0 16px;color:var(--soft);font-size:14px}
   .gate input{width:100%;border:2px solid var(--ring);border-radius:16px;padding:12px 14px;font-family:inherit;
     font-size:16px;text-align:center;color:var(--ink);background:#fffafc;margin-bottom:12px}
@@ -696,8 +707,10 @@ function showGate(){
       <p>This file isn't connected yet. Open it in a text editor and fill in <b>SUPABASE_URL</b>, <b>SUPABASE_ANON_KEY</b> and <b>TEAM_PASSWORD</b> at the top of the script (see SETUP.md).</p>`;
     return;
   }
-  g.innerHTML=`<div style="font-size:40px">🌸</div><h2>Moments</h2>
-    <p>Enter the team password to come in 💕</p>
+  const parade=PEOPLE.map((p,i)=>`<span class="ava" style="width:38px;height:38px;display:inline-block;animation-delay:${i*0.07}s">${animalSVG(p.face,38)}</span>`).join('');
+  g.innerHTML=`<div class="logo">🌸</div><h2>Moments</h2>
+    <div class="parade">${parade}</div>
+    <p>our little team scrapbook 🐾 enter the password to come in 💕</p>
     <input id="pw" type="password" placeholder="team password" onkeydown="if(event.key==='Enter')tryPw()">
     <div class="err" id="pwErr"></div>
     <button class="pill go" style="width:100%;justify-content:center" onclick="tryPw()">Enter ✨</button>`;
